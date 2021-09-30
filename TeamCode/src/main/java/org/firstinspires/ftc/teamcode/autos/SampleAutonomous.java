@@ -28,29 +28,29 @@ public class SampleAutonomous extends BaseRobot {
         super.loop();
 
         // autonomous uses a switch statement to step through each part of the autonomous
-        switch (stage) {
-            case 0:
-                timer.reset();
-                Control.drive(1, 10);
-                if (timer.seconds() >= 5) {
-                    stage++;
-                }
-                break;
-
-            case 1:
-                if (Control.turn(1.0, 180)) {
-                    stage++;
-                }
-                break;
-
-            case 2:
-                timer.reset();
-                Control.drive(1, 10);
-                stage++;
-                break;
-
-            default:
-                break;
-        }
+//        switch (stage) {
+//            case 0:
+//                timer.reset();
+//                Control.drive.autoDrive(1, 10);
+//                if (timer.seconds() >= 5) {
+//                    stage++;
+//                }
+//                break;
+//
+//            case 1:
+//                if (Control.drive.autoTurn(1.0, 180)) {
+//                    stage++;
+//                }
+//                break;
+//
+//            case 2:
+//                timer.reset();
+//                Control.drive.autoDrive(1, 10);
+//                stage++;
+//                break;
+//
+//            default:
+//                break;
+//        }
     }
 }

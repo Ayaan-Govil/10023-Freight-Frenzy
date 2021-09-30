@@ -1,7 +1,14 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.hardware;
 
 // constant variables for drive algorithms
 public class ConstantVariables {
+
+    public static final double WHEEL_DIAMETER = 4.125;
+    public static final int GEAR_RATIO = 40;
+    public static final int COUNTS_PER_ROTATION = 28;
+    public static final double COUNTS_PER_INCH = (COUNTS_PER_ROTATION * GEAR_RATIO) / (Math.PI * WHEEL_DIAMETER); //counts per inch, cpr * gear ratio / (2 * pi * diameter (in inches, in the center))
+    public static final double BIAS = 0.8;
+
 
     public static final int K_PPR_DRIVE = 1120;
     public static final double K_DRIVE_WHEEL_DIA = 4;
