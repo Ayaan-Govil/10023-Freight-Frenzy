@@ -5,6 +5,12 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+
 public class Control extends Devices {
 
 
@@ -58,6 +64,13 @@ public class Control extends Devices {
             rightBackDriveMotor.setPower(rightBackPower);
         }
 
+        public static void stopPower() {
+            leftFrontDriveMotor.setPower(0);
+            leftBackDriveMotor.setPower(0);
+            rightFrontDriveMotor.setPower(0);
+            rightBackDriveMotor.setPower(0);
+        }
+
 //        public static boolean autoDrive(double power, double inches) {
 //            double TARGET_ENC = ConstantVariables.K_PPIN_DRIVE * inches;
 //            double left_speed = -power;
@@ -109,35 +122,170 @@ public class Control extends Devices {
 
     public static class auto {
 
-        public static void moveToPosition(double inches, double speed) {
-            boolean exit = false;
+        public static void moveWithEncoder(double inches, double speed) {
             double conversion = ConstantVariables.COUNTS_PER_INCH * ConstantVariables.BIAS;
             int move = (int) (Math.round(inches * conversion));
 
-            leftBackDriveMotor.setTargetPosition(leftBackDriveMotor.getCurrentPosition() + move);
-            leftFrontDriveMotor.setTargetPosition(leftFrontDriveMotor.getCurrentPosition() + move);
-            rightBackDriveMotor.setTargetPosition(rightBackDriveMotor.getCurrentPosition() + move);
-            rightFrontDriveMotor.setTargetPosition(rightFrontDriveMotor.getCurrentPosition() + move);
+            leftFrontDriveMotor.setTargetPosition(leftBackDriveMotor.getCurrentPosition() + move);
+            leftBackDriveMotor.setTargetPosition(leftFrontDriveMotor.getCurrentPosition() + move);
+            rightFrontDriveMotor.setTargetPosition(rightBackDriveMotor.getCurrentPosition() + move);
+            rightBackDriveMotor.setTargetPosition(rightFrontDriveMotor.getCurrentPosition() + move);
 
-            leftBackDriveMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            leftFrontDriveMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            rightBackDriveMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            rightFrontDriveMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            Encoders.driveRunToPosition();
 
-            leftBackDriveMotor.setPower(speed);
             leftFrontDriveMotor.setPower(speed);
-            rightBackDriveMotor.setPower(speed);
+            leftBackDriveMotor.setPower(speed);
             rightFrontDriveMotor.setPower(speed);
+            rightBackDriveMotor.setPower(speed);
 
-            while (leftBackDriveMotor.isBusy() && leftFrontDriveMotor.isBusy() && rightBackDriveMotor.isBusy() && rightFrontDriveMotor.isBusy()) {
+            while (leftFrontDriveMotor.isBusy() && leftBackDriveMotor.isBusy() && rightFrontDriveMotor.isBusy() && rightBackDriveMotor.isBusy()) {
 
             }
 
-            leftBackDriveMotor.setPower(0);
             leftFrontDriveMotor.setPower(0);
-            rightBackDriveMotor.setPower(0);
+            leftBackDriveMotor.setPower(0);
             rightFrontDriveMotor.setPower(0);
+            rightBackDriveMotor.setPower(0);
             return;
+        }
+
+        public static void turnWithEncoder(double power) {
+            Encoders.driveRunUsingEncoder();
+
+            leftFrontDriveMotor.setPower(power);
+            leftBackDriveMotor.setPower(power);
+            rightFrontDriveMotor.setPower(-power);
+            rightBackDriveMotor.setPower(-power);
+        }
+
+        /*
+   This function uses the Expansion Hub IMU Integrated Gyro to turn a precise number of degrees (+/- 5).
+   Degrees should always be positive, make speedDirection negative to turn left.
+    */
+        public static void turnWithGyro(double degrees, double speedDirection) {
+            //<editor-fold desc="Initialize">
+            Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            double yaw = -angles.firstAngle;//make this negative
+            Acceleration gravity;
+
+            double first;
+            double second;
+            //</editor-fold>
+            //
+            if (speedDirection > 0) {//set target positions
+                //<editor-fold desc="turn right">
+                if (degrees > 10) {
+                    first = (degrees - 10) + devertDegrees(yaw);
+                    second = degrees + devertDegrees(yaw);
+                } else {
+                    first = devertDegrees(yaw);
+                    second = degrees + devertDegrees(yaw);
+                }
+                //</editor-fold>
+            } else {
+                //<editor-fold desc="turn left">
+                if (degrees > 10) {
+                    first = devertDegrees(-(degrees - 10) + devertDegrees(yaw));
+                    second = devertDegrees(-degrees + devertDegrees(yaw));
+                } else {
+                    first = devertDegrees(yaw);
+                    second = devertDegrees(-degrees + devertDegrees(yaw));
+                }
+                //
+                //</editor-fold>
+            }
+            //
+            //<editor-fold desc="Go to position">
+            Double firsta = convertDegrees(first - 5);//175
+            Double firstb = convertDegrees(first + 5);//-175
+            //
+            turnWithEncoder(speedDirection);
+
+            if (Math.abs(firsta - firstb) < 11) {
+                while (!(firsta < yaw && yaw < firstb)) {//within range?
+                    angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                    gravity = imu.getGravity();
+                    yaw = -angles.firstAngle;
+                }
+            } else {
+                //
+                while (!((firsta < yaw && yaw < 180) || (-180 < yaw && yaw < firstb))) {//within range?
+                    angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                    gravity = imu.getGravity();
+                    yaw = -angles.firstAngle;
+                }
+            }
+            //
+            Double seconda = convertDegrees(second - 5);//175
+            Double secondb = convertDegrees(second + 5);//-175
+            //
+            turnWithEncoder(speedDirection / 3);
+            //
+            if (Math.abs(seconda - secondb) < 11) {
+                while (!(seconda < yaw && yaw < secondb)) {//within range?
+                    angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                    gravity = imu.getGravity();
+                    yaw = -angles.firstAngle;
+                }
+                while (!((seconda < yaw && yaw < 180) || (-180 < yaw && yaw < secondb))) {//within range?
+                    angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                    gravity = imu.getGravity();
+                    yaw = -angles.firstAngle;
+                }
+                drive.stopPower();
+            }
+            Encoders.driveResetEncs();
+        }
+
+        //
+    /*
+    This function uses the encoders to strafe left or right.
+    Negative input for inches results in left strafing.
+     */
+        public static void strafeToPosition(double inches, double speed) {
+            double meccyBias = 0.9;
+            int move = (int) (Math.round(inches * ConstantVariables.COUNTS_PER_INCH * meccyBias));
+
+            leftFrontDriveMotor.setTargetPosition(leftFrontDriveMotor.getCurrentPosition() - move);
+            leftBackDriveMotor.setTargetPosition(leftBackDriveMotor.getCurrentPosition() + move);
+            rightFrontDriveMotor.setTargetPosition(rightFrontDriveMotor.getCurrentPosition() + move);
+            rightBackDriveMotor.setTargetPosition(rightBackDriveMotor.getCurrentPosition() - move);
+
+            Encoders.driveRunToPosition();
+
+            leftFrontDriveMotor.setPower(speed);
+            leftBackDriveMotor.setPower(speed);
+            rightFrontDriveMotor.setPower(speed);
+            rightBackDriveMotor.setPower(speed);
+
+            while (leftFrontDriveMotor.isBusy() && leftBackDriveMotor.isBusy() && rightFrontDriveMotor.isBusy() && rightBackDriveMotor.isBusy()) {
+
+            }
+
+            drive.stopPower();
+            return;
+        }
+
+        /*
+        These functions are used in the turnWithGyro function to ensure inputs
+        are interpreted properly.
+         */
+        public static double devertDegrees(double degrees) {
+            if (degrees < 0) {
+                degrees = degrees + 360;
+            }
+            return degrees;
+        }
+
+        public static double convertDegrees(double degrees) {
+            if (degrees > 179) {
+                degrees = -(360 - degrees);
+            } else if (degrees < -180) {
+                degrees = 360 + degrees;
+            } else if (degrees > 360) {
+                degrees = degrees - 360;
+            }
+            return degrees;
         }
     }
 

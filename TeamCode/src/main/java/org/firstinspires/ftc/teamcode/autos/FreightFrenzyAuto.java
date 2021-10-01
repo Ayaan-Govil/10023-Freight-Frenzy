@@ -21,7 +21,7 @@ public class FreightFrenzyAuto extends BaseRobot {
     public void start() {
         super.start();
 
-        Control.auto.moveToPosition(10, 0.5);
+        Control.auto.moveWithEncoder(10, 0.5);
     }
 
     @Override
