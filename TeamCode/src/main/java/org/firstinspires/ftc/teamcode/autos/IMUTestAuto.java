@@ -41,21 +41,21 @@ public class IMUTestAuto extends LinearOpMode {
         //
         initGyro();
         //
-        frontleft = hardwareMap.dcMotor.get("frontleft");
-        frontright = hardwareMap.dcMotor.get("frontright");
-        backleft = hardwareMap.dcMotor.get("backleft");
-        backright = hardwareMap.dcMotor.get("backright");
+        frontleft = hardwareMap.dcMotor.get("leftFrontDriveMotor");
+        frontright = hardwareMap.dcMotor.get("rightFrontDriveMotor");
+        backleft = hardwareMap.dcMotor.get("leftBackDriveMotor");
+        backright = hardwareMap.dcMotor.get("rightBackDriveMotor");
 
         frontright.setDirection(DcMotorSimple.Direction.REVERSE);
         backright.setDirection(DcMotorSimple.Direction.REVERSE);
         //
         waitForStart();
         //
-        moveToPosition(12.6, 0.2);
+        moveToPosition(12.6, 1.0);
         //
-        turnWithGyro(90, -0.2);
-        //
-        moveToPosition(35.2, 0.2);
+        turnWithGyro(90, 1.0);
+//        //
+//        moveToPosition(35.2, 0.2);
         //
     }
 

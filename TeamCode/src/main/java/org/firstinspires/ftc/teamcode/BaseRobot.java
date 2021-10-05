@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.hardware.*;
 
 /**
@@ -24,20 +25,22 @@ public class BaseRobot extends OpMode {
     public void init() {
         // map the devices initialized in the Devices class
         // NOTE: deviceName should be the same as the name specified on the configuration
+        Devices.initDevices(hardwareMap);
 //        Devices.leftBackDriveMotor = hardwareMap.get(DcMotor.class, "leftBackDriveMotor");
 //        Devices.rightBackDriveMotor = hardwareMap.get(DcMotor.class, "rightBackDriveMotor");
 //        Devices.leftFrontDriveMotor = hardwareMap.get(DcMotor.class, "leftFrontDriveMotor");
 //        Devices.rightFrontDriveMotor = hardwareMap.get(DcMotor.class, "rightFrontDriveMotor");
-        Control.drive.configureDriveMotors();
-
-        Devices.armLiftMotor = hardwareMap.get(DcMotor.class, "armLiftMotor");
-        Devices.armLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        Devices.armAdjustServo = hardwareMap.get(Servo.class,"armAdjustServo");
-
-        Devices.lightStrip = hardwareMap.get(RevBlinkinLedDriver.class, "lightStrip");
-//      Devices.distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
-
-        Devices.imu = hardwareMap.get(BNO055IMU.class, "imu");
+//        Control.drive.configureDriveMotors();
+//
+////        Devices.armLiftMotor = hardwareMap.get(DcMotor.class, "armLiftMotor");
+////        Devices.armLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+////        Devices.armAdjustServo = hardwareMap.get(Servo.class,"armAdjustServo");
+//
+////        Devices.lightStrip = hardwareMap.get(RevBlinkinLedDriver.class, "lightStrip");
+////      Devices.distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
+//
+//        Devices.imu = hardwareMap.get(BNO055IMU.class, "imu");
+//        Devices.webcam = hardwareMap.get(WebcamName.class, "Webcam 1");
     }
 
     // this function runs when you hit the start button after the init button
@@ -58,9 +61,9 @@ public class BaseRobot extends OpMode {
     @Override
     public void loop() {
         // telemetry (inherited from OpMode class) serves as logging on the phone - we're constantly tracking the drive motor encoders by doing this
-//        telemetry.addData("D00 Left Front Drive Motor Enc: ", Encoders.getMotorEnc(Devices.leftFrontDriveMotor));
-//        telemetry.addData("D01 Right Front Drive Motor Enc: ", Encoders.getMotorEnc(Devices.rightFrontDriveMotor));
-//        telemetry.addData("D02 Left Back Drive Motor Enc: ", Encoders.getMotorEnc(Devices.leftBackDriveMotor));
-//        telemetry.addData("D03 Right Back Drive Motor Enc: ", Encoders.getMotorEnc(Devices.rightBackDriveMotor));
+        telemetry.addData("D00 Left Front Drive Motor Enc: ", Encoders.getMotorEnc(Devices.leftFrontDriveMotor));
+        telemetry.addData("D01 Right Front Drive Motor Enc: ", Encoders.getMotorEnc(Devices.rightFrontDriveMotor));
+        telemetry.addData("D02 Left Back Drive Motor Enc: ", Encoders.getMotorEnc(Devices.leftBackDriveMotor));
+        telemetry.addData("D03 Right Back Drive Motor Enc: ", Encoders.getMotorEnc(Devices.rightBackDriveMotor));
     }
 }

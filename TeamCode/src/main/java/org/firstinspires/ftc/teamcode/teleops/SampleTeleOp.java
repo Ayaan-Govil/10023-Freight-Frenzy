@@ -34,17 +34,17 @@ public class SampleTeleOp extends BaseRobot {
     public void loop() {
         super.loop();
 
-        Devices.lightStrip.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP2_SHOT);
+//        Devices.lightStrip.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP2_SHOT);
 //        telemetry.addData("Distance (mm): ", Devices.distanceSensor.getDistance(DistanceUnit.MM));
 
         // drive using tankanum
-//        Control.tankanumDrive(gamepad1.right_stick_y, gamepad1.left_stick_y, gamepad1.right_stick_x);
+        Control.drive.tankanumDrive(gamepad1.right_stick_y, gamepad1.left_stick_y, gamepad1.right_stick_x);
 
-        if (gamepad1.a) {
-            Devices.armAdjustServo.setPosition(1.0);
-        } else if (gamepad1.b) {
-            Devices.armAdjustServo.setPosition(0.0);
-        }
+//        if (gamepad1.a) {
+//            Devices.armAdjustServo.setPosition(1.0);
+//        } else if (gamepad1.b) {
+//            Devices.armAdjustServo.setPosition(0.0);
+//        }
 
         // control armLiftMotor
 //        int stageSpaces = 500;
