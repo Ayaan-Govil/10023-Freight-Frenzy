@@ -10,45 +10,25 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.hardware.*;
 
 /**
- * Template created by Ayaan Govil on 8/21/2021
+ * Template created by Ayaan Govil on 8/21/2021. Last updated on 10/7/21.
  *
  * FTC Java Documentation: http://ftctechnh.github.io/ftc_app/doc/javadoc/index.html
  */
 
-// basebot serves as the first execution point before flowing into the teleop/auto
+// basebot serves as the first execution point before flowing into the teleop
 
 public class BaseRobot extends OpMode {
-    public ElapsedTime timer = new ElapsedTime();
-
     // this function runs when you hit the init button on the app
     @Override
     public void init() {
-        // map the devices initialized in the Devices class
-        // NOTE: deviceName should be the same as the name specified on the configuration
+        // map and initialize devices
         Devices.initDevices(hardwareMap);
-//        Devices.leftBackDriveMotor = hardwareMap.get(DcMotor.class, "leftBackDriveMotor");
-//        Devices.rightBackDriveMotor = hardwareMap.get(DcMotor.class, "rightBackDriveMotor");
-//        Devices.leftFrontDriveMotor = hardwareMap.get(DcMotor.class, "leftFrontDriveMotor");
-//        Devices.rightFrontDriveMotor = hardwareMap.get(DcMotor.class, "rightFrontDriveMotor");
-//        Control.drive.configureDriveMotors();
-//
-////        Devices.armLiftMotor = hardwareMap.get(DcMotor.class, "armLiftMotor");
-////        Devices.armLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-////        Devices.armAdjustServo = hardwareMap.get(Servo.class,"armAdjustServo");
-//
-////        Devices.lightStrip = hardwareMap.get(RevBlinkinLedDriver.class, "lightStrip");
-////      Devices.distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
-//
-//        Devices.imu = hardwareMap.get(BNO055IMU.class, "imu");
-//        Devices.webcam = hardwareMap.get(WebcamName.class, "Webcam 1");
     }
 
     // this function runs when you hit the start button after the init button
     @Override
     public void start() {
-//        timer.reset();
-//        Encoders.resetDriveEncs();
-//        Encoders.resetMotorEnc(Devices.armLiftMotor);
+
     }
 
     // this function runs when you hit the stop button

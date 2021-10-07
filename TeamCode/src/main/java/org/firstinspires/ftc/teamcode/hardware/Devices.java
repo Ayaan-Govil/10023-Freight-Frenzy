@@ -15,6 +15,7 @@ public class Devices {
     public static BNO055IMU imu;
     public static WebcamName webcam;
 
+    // NOTE: deviceName should be the same as the name specified on the configuration
     public static void initDevices(HardwareMap hardwareMap) {
         Devices.leftBackDriveMotor = hardwareMap.get(DcMotor.class, "leftBackDriveMotor");
         Devices.rightBackDriveMotor = hardwareMap.get(DcMotor.class, "rightBackDriveMotor");
@@ -27,10 +28,9 @@ public class Devices {
 //        Devices.armAdjustServo = hardwareMap.get(Servo.class,"armAdjustServo");
 
 //        Devices.lightStrip = hardwareMap.get(RevBlinkinLedDriver.class, "lightStrip");
-//      Devices.distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
+//        Devices.distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
 
         Devices.imu = hardwareMap.get(BNO055IMU.class, "imu");
         Devices.webcam = hardwareMap.get(WebcamName.class, "Webcam 1");
     }
-
 }

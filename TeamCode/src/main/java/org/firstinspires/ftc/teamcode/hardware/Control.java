@@ -93,51 +93,51 @@ public class Control extends Devices {
     public static class auto {
 
         // old method of autonomous drive, only use in iterative autos
-        public static boolean drive(double inches, double power) {
-            double TARGET_ENC = ConstantVariables.K_PPIN_DRIVE * inches;
-            double left_speed = power;
-            double right_speed = power;
-            double error = -Encoders.getMotorEnc(Devices.leftFrontDriveMotor) - Encoders.getMotorEnc(Devices.rightFrontDriveMotor);
+//        public static boolean drive(double inches, double power) {
+//            double TARGET_ENC = ConstantVariables.K_PPIN_DRIVE * inches;
+//            double left_speed = power;
+//            double right_speed = power;
+//            double error = -Encoders.getMotorEnc(Devices.leftFrontDriveMotor) - Encoders.getMotorEnc(Devices.rightFrontDriveMotor);
+//
+//            error /= ConstantVariables.K_DRIVE_ERROR_P;
+//            left_speed += error;
+//            right_speed -= error;
+//
+//            left_speed = Range.clip(left_speed, -1, 1);
+//            right_speed = Range.clip(right_speed, -1, 1);
+//            leftFrontDriveMotor.setPower(left_speed);
+//            leftBackDriveMotor.setPower(left_speed);
+//            rightFrontDriveMotor.setPower(right_speed);
+//            rightBackDriveMotor.setPower(right_speed);
+//
+//            if (Math.abs(Encoders.getMotorEnc(Devices.rightFrontDriveMotor)) >= TARGET_ENC) {
+//                drive.stopPower();
+//                return true;
+//            } else return false;
+//        }
 
-            error /= ConstantVariables.K_DRIVE_ERROR_P;
-            left_speed += error;
-            right_speed -= error;
-
-            left_speed = Range.clip(left_speed, -1, 1);
-            right_speed = Range.clip(right_speed, -1, 1);
-            leftFrontDriveMotor.setPower(left_speed);
-            leftBackDriveMotor.setPower(left_speed);
-            rightFrontDriveMotor.setPower(right_speed);
-            rightBackDriveMotor.setPower(right_speed);
-
-            if (Math.abs(Encoders.getMotorEnc(Devices.rightFrontDriveMotor)) >= TARGET_ENC) {
-                drive.stopPower();
-                return true;
-            } else return false;
-        }
-
-        //         turns a specific amount of degrees
-//         power: the speed to move (1.0 to -1.0)
-//         degrees: the amount of degees to turn
-//         returns whether it has reached the target degrees
-        // old method of autonomous turning, only use in iterative autos
-        public static boolean turn(double power, double degrees) {
-            double TARGET_ENC = Math.abs(ConstantVariables.K_PPDEG_DRIVE * degrees);
-
-            double speed = Range.clip(power, -1, 1);
-            leftFrontDriveMotor.setPower(-speed);
-            leftBackDriveMotor.setPower(-speed);
-            rightFrontDriveMotor.setPower(speed);
-            rightBackDriveMotor.setPower(speed);
-
-            if (Math.abs(Encoders.getMotorEnc(rightFrontDriveMotor)) >= TARGET_ENC) {
-                leftFrontDriveMotor.setPower(0);
-                leftBackDriveMotor.setPower(0);
-                rightFrontDriveMotor.setPower(0);
-                rightBackDriveMotor.setPower(0);
-                return true;
-            } else return false;
-        }
+        // turns a specific amount of degrees
+        // power: the speed to move (1.0 to -1.0)
+        // degrees: the amount of degees to turn
+        // returns whether it has reached the target degrees
+        // old method of autonomous turn, only use in iterative autos
+//        public static boolean turn(double power, double degrees) {
+//            double TARGET_ENC = Math.abs(ConstantVariables.K_PPDEG_DRIVE * degrees);
+//
+//            double speed = Range.clip(power, -1, 1);
+//            leftFrontDriveMotor.setPower(-speed);
+//            leftBackDriveMotor.setPower(-speed);
+//            rightFrontDriveMotor.setPower(speed);
+//            rightBackDriveMotor.setPower(speed);
+//
+//            if (Math.abs(Encoders.getMotorEnc(rightFrontDriveMotor)) >= TARGET_ENC) {
+//                leftFrontDriveMotor.setPower(0);
+//                leftBackDriveMotor.setPower(0);
+//                rightFrontDriveMotor.setPower(0);
+//                rightBackDriveMotor.setPower(0);
+//                return true;
+//            } else return false;
+//        }
 
         public static void moveWithEncoder(double inches, double speed) {
             double conversion = ConstantVariables.COUNTS_PER_INCH * ConstantVariables.BIAS;
@@ -163,22 +163,15 @@ public class Control extends Devices {
             return;
         }
 
-        /*
-   This function uses the Expansion Hub IMU Integrated Gyro to turn a precise number of degrees (+/- 5).
-   Degrees should always be positive, make speedDirection negative to turn left.
-    */
+        // degrees always positive, speedDirection to speed and direction
         public static void turnWithGyro(double degrees, double speedDirection) {
-            //<editor-fold desc="Initialize">
             Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            double yaw = -angles.firstAngle;//make this negative
-//            Acceleration gravity;
+            double yaw = -angles.firstAngle;
 
             double first;
             double second;
-            //</editor-fold>
-            //
-            if (speedDirection > 0) {//set target positions
-                //<editor-fold desc="turn right">
+
+            if (speedDirection > 0) {
                 if (degrees > 10) {
                     first = (degrees - 10) + devertDegrees(yaw);
                     second = degrees + devertDegrees(yaw);
@@ -186,9 +179,7 @@ public class Control extends Devices {
                     first = devertDegrees(yaw);
                     second = degrees + devertDegrees(yaw);
                 }
-                //</editor-fold>
             } else {
-                //<editor-fold desc="turn left">
                 if (degrees > 10) {
                     first = devertDegrees(-(degrees - 10) + devertDegrees(yaw));
                     second = devertDegrees(-degrees + devertDegrees(yaw));
@@ -196,14 +187,11 @@ public class Control extends Devices {
                     first = devertDegrees(yaw);
                     second = devertDegrees(-degrees + devertDegrees(yaw));
                 }
-                //
-                //</editor-fold>
             }
-            //
-            //<editor-fold desc="Go to position">
-//            double firsta = convertDegrees(first - 5);//175
-//            double firstb = convertDegrees(first + 5);//-175
-//            //
+
+//            double firsta = convertDegrees(first - 5); // 175
+//            double firstb = convertDegrees(first + 5); // -175
+
 //            drive.turnWithEncoder(speedDirection);
 //
 //            if (Math.abs(firsta - firstb) < 11) {
@@ -213,7 +201,6 @@ public class Control extends Devices {
 //                    yaw = -angles.firstAngle;
 //                }
 //            } else {
-//                //
 //                while (!((firsta < yaw && yaw < 180) || (-180 < yaw && yaw < firstb))) {//within range?
 //                    angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 ////                    gravity = imu.getGravity();
@@ -221,24 +208,23 @@ public class Control extends Devices {
 //                }
 //            }
 
-            double seconda = convertDegrees(second - 5);//175
-            double secondb = convertDegrees(second + 5);//-175
+            double seconda = convertDegrees(second - 5); // 175
+            double secondb = convertDegrees(second + 5); // -175
 
             drive.turnWithEncoder(speedDirection);
 
             if (Math.abs(seconda - secondb) < 11) {
                 while (!(seconda < yaw && yaw < secondb)) {//within range?
                     angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-//                    gravity = imu.getGravity();
                     yaw = -angles.firstAngle;
                 }
                 while (!((seconda < yaw && yaw < 180) || (-180 < yaw && yaw < secondb))) {//within range?
                     angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-//                    gravity = imu.getGravity();
                     yaw = -angles.firstAngle;
                 }
                 drive.stopPower();
             }
+
             Encoders.driveResetEncs();
         }
 
@@ -248,7 +234,7 @@ public class Control extends Devices {
         Negative input for inches results in left strafing.
          */
         public static void strafeToPosition(double inches, double speed) {
-            double meccyBias = 0.9;
+            double meccyBias = 1.1;
             int move = (int) (Math.round(inches * ConstantVariables.COUNTS_PER_INCH * meccyBias));
 
             leftFrontDriveMotor.setTargetPosition(leftFrontDriveMotor.getCurrentPosition() - move);
@@ -274,7 +260,7 @@ public class Control extends Devices {
         /*
         These functions are used in the turnWithGyro function to ensure inputs
         are interpreted properly.
-         */
+        */
         public static double devertDegrees(double degrees) {
             if (degrees < 0) {
                 degrees = degrees + 360;
@@ -292,20 +278,10 @@ public class Control extends Devices {
             }
             return degrees;
         }
-    }
 
-    public static class servo {
 
-        // sets servo position based on pos
-        // 1.0: highest position
-        // 0.0: lowest position
-        public static void setServoPosition(Servo servo, double pos) {
-            double position = Range.clip(pos, 0.0, 1.0);
-            servo.setPosition(position);
-        }
-    }
+        // Tensorflow
 
-    public static class sensor {
 
         private static VuforiaLocalizer vuforia;
 
@@ -334,7 +310,7 @@ public class Control extends Devices {
             tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
             tfod.loadModelFromAsset(asset, labels);
             tfod.activate();
-            tfod.setZoom(magnification, 16.0/9.0);
+            tfod.setZoom(magnification, 16.0 / 9.0);
         }
 
         public static List<Recognition> tfGetRecognitions() {
@@ -342,25 +318,57 @@ public class Control extends Devices {
         }
 
         public static Recognition getDuck(Telemetry telemetry) {
-            while (tfGetRecognitions().size() == 0) {
-                // waiting for something to be found
-                telemetry.addData(">", "Looking for duck...");
-                telemetry.update();
-            }
-            Recognition duck = tfGetRecognitions().get(0);
-            for (Recognition recognition : tfGetRecognitions()) {
-                if (recognition.getLabel().equals("Duck")) duck = recognition;
+            ElapsedTime timer = new ElapsedTime();
+            boolean duckFound = false;
+            Recognition duck = null;
+            while (!duckFound) {
+                if (timer.seconds() <= 5) {
+                    List<Recognition> updatedRecognitions = tfGetRecognitions();
+                    if (updatedRecognitions != null) {
+                        int i = 0;
+                        for (Recognition recognition : updatedRecognitions) {
+                            telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                            if (recognition.getLabel().equals("Duck")) {
+                                duck = recognition;
+                                duckFound = true;
+
+                            }
+                            i++;
+                        }
+                    }
+                    telemetry.update();
+                } else {
+                    duckFound = true;
+                }
             }
             return duck;
         }
 
-        public static int getDuckPositionIndex(double angle) {
-            if (angle >= 10.0) return 0;
-            else if (angle <= -10.0) return 2;
+        public static int getDuckPositionIndexThree(double angle) {
+            if (angle >= 10.0) return 2;
+            else if (angle <= -10.0) return 0;
             else return 1;
-//            else if (angle <= 10.0 && angle >= -10.0) return 1;
-//            else return -1;
         }
+
+        public static int getDuckPositionIndexTwo(double angle) {
+            if (angle >= 10.0) return 1;
+            else if (angle <= -10.0) return 0;
+            else return 2;
+        }
+    }
+
+    public static class servo {
+
+        // sets servo position based on pos
+        // 1.0: highest position
+        // 0.0: lowest position
+        public static void setServoPosition(Servo servo, double pos) {
+            double position = Range.clip(pos, 0.0, 1.0);
+            servo.setPosition(position);
+        }
+    }
+
+    public static class sensor {
 
         public static void initGyro() {
             BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
