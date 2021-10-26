@@ -74,7 +74,7 @@ public class ThreeMarkerDuck extends LinearOpMode {
         Control.auto.strafeToPosition(40, -1.0);
 
         // move towards shipping hub
-        Control.auto.moveWithEncoder(20, 1.0);
+//        Control.auto.moveWithEncoder(20, 1.0);
 
         // move cargo to level indicated by duck
         Control.motor.linearSlideSetPosition(Devices.armLiftMotor, duckPositionIndex);

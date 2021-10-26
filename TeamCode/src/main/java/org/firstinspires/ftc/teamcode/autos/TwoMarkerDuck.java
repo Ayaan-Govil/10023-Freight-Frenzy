@@ -56,7 +56,7 @@ public class TwoMarkerDuck extends LinearOpMode {
 
         waitForStart();
 
-        Control.auto.moveWithEncoder(10, 1.0);
+//        Control.auto.moveWithEncoder(10, 1.0);
 
         Recognition duck = Control.auto.getDuck(telemetry);
 
