@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.teleops;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
@@ -19,6 +20,8 @@ import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 
 public class SampleTeleOp extends BaseRobot {
     private int stage = 0;
+//    private double power = 1.0;
+
 
     @Override
     public void init() {
@@ -38,51 +41,48 @@ public class SampleTeleOp extends BaseRobot {
 //        telemetry.addData("Distance (mm): ", Devices.distanceSensor.getDistance(DistanceUnit.MM));
 
         // drive using tankanum
-        Control.drive.tankanumDrive(gamepad1.right_stick_y, gamepad1.left_stick_y, gamepad1.right_stick_x);
+        telemetry.addData("right stick y: ", gamepad1.right_stick_y);
+        Control.drive.tankanumDrive(gamepad1.right_stick_y/2, gamepad1.left_stick_y/2, gamepad1.right_stick_x/2);
 
-//        if (gamepad1.a) {
-//            Devices.armAdjustServo.setPosition(1.0);
-//        } else if (gamepad1.b) {
-//            Devices.armAdjustServo.setPosition(0.0);
+//        if (Encoders.getMotorEnc(Devices.armLiftMotor) < 400) stage = 0;
+//        else if (Encoders.getMotorEnc(Devices.armLiftMotor) < 900) stage = 1;
+//        else stage = 2;
+//
+//        // control dumpy 🤤🥴😩
+//        if (gamepad1.dpad_right) {
+//            Devices.dumpyServo.setPosition(1.0);
+//        } else if (gamepad1.dpad_left) {
+//            Devices.dumpyServo.setPosition(0.0);
 //        }
-
-        // control armLiftMotor
-//        int stageSpaces = 500;
-//        double speed = 1.0;
+//
+//        telemetry.addData("lift enc: ", Encoders.getMotorEnc(Devices.armLiftMotor));
 //        telemetry.addData("stage: ", stage);
 //
+//        Devices.armLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//
 //        if (gamepad1.dpad_up && stage < 2) {
-//            int targetEnc = (stage + 1) * stageSpaces;
-//            while (Encoders.getMotorEnc((Devices.armLiftMotor)) < targetEnc) {
-//                Control.moveMotor(Devices.armLiftMotor, speed);
-//            }
-//            Control.moveMotor(Devices.armLiftMotor, 0.0);
 //            stage++;
+//            Control.motor.linearSlideSetPosition(Devices.armLiftMotor, stage);
 //        } else if (gamepad1.dpad_down && stage > 0) {
-//            int targetEnc = (stage - 1) * stageSpaces;
-//            if (targetEnc == 0) targetEnc = 50;
-//            while (Encoders.getMotorEnc((Devices.armLiftMotor)) > targetEnc) {
-//                Control.moveMotor(Devices.armLiftMotor, -speed);
-//            }
-//            Control.moveMotor(Devices.armLiftMotor, 0.0);
 //            stage--;
+//            Control.motor.linearSlideSetPosition(Devices.armLiftMotor, stage);
 //        } else if (gamepad1.b) {
-//            Control.moveMotor(Devices.armLiftMotor, 0.1);
-//            if (Encoders.getMotorEnc(Devices.armLiftMotor) >= stageSpaces) {
+//            Control.motor.moveMotor(Devices.armLiftMotor, 0.1);
+//            if (Encoders.getMotorEnc(Devices.armLiftMotor) >= 500) {
 //                stage = 1;
 //            }
-//            if (Encoders.getMotorEnc(Devices.armLiftMotor) >= stageSpaces * 2) {
+//            if (Encoders.getMotorEnc(Devices.armLiftMotor) >= 1000) {
 //                stage = 2;
 //            }
 //        } else if (gamepad1.a) {
-//            Control.moveMotor(Devices.armLiftMotor, -0.1);
-//            if (Encoders.getMotorEnc(Devices.armLiftMotor) <= stageSpaces) {
+//            Control.motor.moveMotor(Devices.armLiftMotor, -0.1);
+//            if (Encoders.getMotorEnc(Devices.armLiftMotor) <= 500) {
 //                stage = 1;
 //            }
 //            if (Encoders.getMotorEnc(Devices.armLiftMotor) <= 0) {
 //                stage = 0;
 //            }
-//        } else Control.moveMotor(Devices.armLiftMotor, 0.0);
+//        } else Control.motor.moveMotor(Devices.armLiftMotor, 0.0);
 
         // control armClampServo
 //        if (gamepad1.left_trigger > 0.0 || gamepad1.left_bumper) {

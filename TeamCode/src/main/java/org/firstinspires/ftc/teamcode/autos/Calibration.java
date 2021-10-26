@@ -53,32 +53,11 @@ public class Calibration extends LinearOpMode {
 
         waitForStart();
 
-        Control.auto.strafeToPosition(20, 0.5);
-//        Control.auto.moveWithEncoder(13, 0.5);
-//        double inches = 20;
-//        double speed = 1;
-//        double meccyBias = 0.9;
-//        int move = (int) (Math.round(inches * ConstantVariables.COUNTS_PER_INCH * meccyBias));
-//
-//        Devices.leftFrontDriveMotor.setTargetPosition(Devices.leftFrontDriveMotor.getCurrentPosition() - move);
-//        Devices.leftBackDriveMotor.setTargetPosition(Devices.leftBackDriveMotor.getCurrentPosition() + move);
-//        Devices.rightFrontDriveMotor.setTargetPosition(Devices.rightFrontDriveMotor.getCurrentPosition() + move);
-//        Devices.rightBackDriveMotor.setTargetPosition(Devices.rightBackDriveMotor.getCurrentPosition() - move);
-//
-//        Encoders.driveRunToPosition();
-//
-////        Devices.rightFrontDriveMotor.setDirection(DcMotor.Direction.FORWARD);
-////        Devices.rightBackDriveMotor.setDirection(DcMotor.Direction.FORWARD);
-//
-//        Devices.leftFrontDriveMotor.setPower(-speed);
-//        Devices.leftBackDriveMotor.setPower(speed);
-//        Devices.rightFrontDriveMotor.setPower(speed);
-//        Devices.rightBackDriveMotor.setPower(speed);
-//
-//        while (Devices.leftFrontDriveMotor.isBusy() && Devices.leftBackDriveMotor.isBusy() && Devices.rightFrontDriveMotor.isBusy() && Devices.rightBackDriveMotor.isBusy()) {
-//
-//        }
-//
-//        Control.drive.stopPower();
+        double speed = 0.2;
+
+//        Control.auto.moveWithEncoder(20, speed);
+//        Control.auto.strafeToPosition(20, speed);
+        Control.auto.turnWithGyro(90, speed);
+
     }
 }

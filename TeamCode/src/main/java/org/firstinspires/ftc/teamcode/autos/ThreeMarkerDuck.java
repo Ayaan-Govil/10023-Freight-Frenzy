@@ -61,12 +61,26 @@ public class ThreeMarkerDuck extends LinearOpMode {
         double duckPositionAngle = duck.estimateAngleToObject(AngleUnit.DEGREES);
         int duckPositionIndex = Control.auto.getDuckPositionIndexThree(duckPositionAngle);
 
-        while (opModeIsActive()) {
-            telemetry.addData("position: ", duckPositionIndex);
-            telemetry.update();
-        }
-//        Control.auto.moveWithEncoder(18, 1.0);
+        telemetry.addData("duck position index: ", duckPositionIndex);
+        telemetry.update();
 
-//        Control.auto.turnWithGyro(90, 0.5);
+        // move to carousel
+        Control.auto.strafeToPosition(20, 1.0);
+
+        // get duck off of carousel
+        Control.auto.spinCarousel(Devices.carouselMotor);
+
+        // move to align with shipping hub
+        Control.auto.strafeToPosition(40, -1.0);
+
+        // move towards shipping hub
+        Control.auto.moveWithEncoder(20, 1.0);
+
+        // move cargo to level indicated by duck
+        Control.motor.linearSlideSetPosition(Devices.armLiftMotor, duckPositionIndex);
+        // Control.motor.dumpCargo();
+
+//        Control.
+
     }
 }

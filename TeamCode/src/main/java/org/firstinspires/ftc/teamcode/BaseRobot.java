@@ -28,13 +28,14 @@ public class BaseRobot extends OpMode {
     // this function runs when you hit the start button after the init button
     @Override
     public void start() {
-
+//        Encoders.resetMotorEnc(Devices.armLiftMotor);
+        Encoders.driveResetEncs();
     }
 
     // this function runs when you hit the stop button
     @Override
     public void stop() {
-
+        Encoders.driveResetEncs();
     }
 
     // this function loops while the bot is running

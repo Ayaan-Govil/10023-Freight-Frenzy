@@ -5,10 +5,10 @@ public class ConstantVariables {
 
     public static final double WHEEL_DIAMETER = 3.77953; // diameter of wheels (this one is gobuilda mecanum)
     public static final int GEAR_RATIO = 20; // gear ratio of motors (this one is 20:1)
-    public static final int COUNTS_PER_ROTATION = 37; // increase/decrease during calibration
+    public static final int COUNTS_PER_ROTATION = 18; // increase/decrease during calibration
     public static final double COUNTS_PER_INCH = (COUNTS_PER_ROTATION * GEAR_RATIO) / (Math.PI * WHEEL_DIAMETER); //counts per inch, cpr * gear ratio / (2 * pi * diameter (in inches, in the center))
     public static final double BIAS = 1.0;
-    
+
     // Get Vuforia key for free from https://developer.vuforia.com/license-manager
     public static final String VUFORIA_KEY = "AVq7Z/f/////AAABmTn41sddFULaqEWgfGwBTyKJSPmOp1LNUQbI0bedCPrPqodi7SxbjmrgL/Uph4zGgJykNsTlOCOhuX7JW+AGDep0cw/Tbro0J6If6p8AE5EV865roJ4+34h4swGhxH/dDvmVzAua2BECWQ9wAaYIT3cSw/VB1eHOvpSV1xwSAwE/S+n4iGEgL86Wt4c1ClFpUW/7CbYEVu0FXnnghmKAHI5jncXp8KQ1Ik3HYARoZsISI/Vbudhc+HE+pO5iKcV5cJElLIDmOSeKIwmbdiF4rzW9GbwHBcLVFO8T+1JyEnB3x/sCkRkH18Z9iEnDHTKT/v/X0FpyzRcYS06iD9p74CVgg1ne+cDKN4KAoeLYRwCy";
 

@@ -8,8 +8,8 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
 public class Devices {
     // to add a hardware device, initialize the device here and map them in BaseBot
-    public static DcMotor leftFrontDriveMotor, rightFrontDriveMotor, leftBackDriveMotor, rightBackDriveMotor, armLiftMotor;
-    public static Servo armAdjustServo;
+    public static DcMotor leftFrontDriveMotor, rightFrontDriveMotor, leftBackDriveMotor, rightBackDriveMotor, armLiftMotor, carouselMotor;
+    public static Servo dumpyServo;
     public static RevBlinkinLedDriver lightStrip;
     public static DistanceSensor distanceSensor;
     public static BNO055IMU imu;
@@ -17,20 +17,22 @@ public class Devices {
 
     // NOTE: deviceName should be the same as the name specified on the configuration
     public static void initDevices(HardwareMap hardwareMap) {
-        Devices.leftBackDriveMotor = hardwareMap.get(DcMotor.class, "leftBackDriveMotor");
-        Devices.rightBackDriveMotor = hardwareMap.get(DcMotor.class, "rightBackDriveMotor");
-        Devices.leftFrontDriveMotor = hardwareMap.get(DcMotor.class, "leftFrontDriveMotor");
-        Devices.rightFrontDriveMotor = hardwareMap.get(DcMotor.class, "rightFrontDriveMotor");
+        leftBackDriveMotor = hardwareMap.get(DcMotor.class, "leftBackDriveMotor");
+        rightBackDriveMotor = hardwareMap.get(DcMotor.class, "rightBackDriveMotor");
+        leftFrontDriveMotor = hardwareMap.get(DcMotor.class, "leftFrontDriveMotor");
+        rightFrontDriveMotor = hardwareMap.get(DcMotor.class, "rightFrontDriveMotor");
         Control.drive.configureDriveMotors();
 
-//        Devices.armLiftMotor = hardwareMap.get(DcMotor.class, "armLiftMotor");
-//        Devices.armLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        Devices.armAdjustServo = hardwareMap.get(Servo.class,"armAdjustServo");
+//        carouselMotor = hardwareMap.get(DcMotor.class, "carouselMotor");
+//        Devices.carouselMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        armLiftMotor = hardwareMap.get(DcMotor.class, "armLiftMotor");
+//        armLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        dumpyServo = hardwareMap.get(Servo.class,"dumpyServo");
 
-//        Devices.lightStrip = hardwareMap.get(RevBlinkinLedDriver.class, "lightStrip");
-//        Devices.distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
+//        lightStrip = hardwareMap.get(RevBlinkinLedDriver.class, "lightStrip");
+//        distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
 
-        Devices.imu = hardwareMap.get(BNO055IMU.class, "imu");
-        Devices.webcam = hardwareMap.get(WebcamName.class, "Webcam 1");
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+//        webcam = hardwareMap.get(WebcamName.class, "Webcam 1");
     }
 }

@@ -35,6 +35,23 @@ public class Control extends Devices {
             double speed = Range.clip(power, -1.0, 1.0);
             motor.setPower(speed);
         }
+
+        public static void linearSlideSetPosition(DcMotor motor, int stageIndex) {
+            double power = 1.0;
+            int targetPosition = stageIndex * 500;
+            if (Encoders.getMotorEnc(motor) > targetPosition) power = -1.0;
+
+            motor.setTargetPosition(targetPosition);
+            motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+            motor.setPower(power);
+            while (motor.isBusy()) {
+            }
+            motor.setPower(0);
+
+            return;
+        }
     }
 
     public static class drive {
@@ -47,6 +64,11 @@ public class Control extends Devices {
             leftBackDriveMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             rightFrontDriveMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             rightBackDriveMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+            leftFrontDriveMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftBackDriveMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightFrontDriveMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightBackDriveMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
 
         // drive with each side correlating to gamepad sticks
@@ -91,6 +113,35 @@ public class Control extends Devices {
     }
 
     public static class auto {
+
+        public static void spinCarousel(DcMotor motor) {
+            int shiftValue = 1000;
+            int targetPosition = Encoders.getMotorEnc(motor) + shiftValue;
+            motor.setTargetPosition(targetPosition);
+            motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+            motor.setPower(1.0);
+            while (motor.isBusy()) {
+            }
+            motor.setPower(0);
+
+            Encoders.resetMotorEnc(motor);
+        }
+
+//        double power = 1.0;
+//        int targetPosition = stageIndex * 500;
+//            if (Encoders.getMotorEnc(motor) > targetPosition) power = -1.0;
+//
+//            motor.setTargetPosition(targetPosition);
+//            motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//
+//            motor.setPower(power);
+//            while (motor.isBusy()) { }
+//            motor.setPower(0);
+//
+//            return;
 
         // old method of autonomous drive, only use in iterative autos
 //        public static boolean drive(double inches, double power) {
@@ -139,14 +190,14 @@ public class Control extends Devices {
 //            } else return false;
 //        }
 
-        public static void moveWithEncoder(double inches, double speed) {
+        public static void moveWithEncoder(double inches, double speed, Telemetry telemetry) {
             double conversion = ConstantVariables.COUNTS_PER_INCH * ConstantVariables.BIAS;
             int move = (int) (Math.round(inches * conversion));
 
-            leftFrontDriveMotor.setTargetPosition(leftBackDriveMotor.getCurrentPosition() + move);
-            leftBackDriveMotor.setTargetPosition(leftFrontDriveMotor.getCurrentPosition() + move);
-            rightFrontDriveMotor.setTargetPosition(rightBackDriveMotor.getCurrentPosition() + move);
-            rightBackDriveMotor.setTargetPosition(rightFrontDriveMotor.getCurrentPosition() + move);
+            leftFrontDriveMotor.setTargetPosition(leftFrontDriveMotor.getCurrentPosition() + move);
+            leftBackDriveMotor.setTargetPosition(leftBackDriveMotor.getCurrentPosition() + move);
+            rightFrontDriveMotor.setTargetPosition(rightFrontDriveMotor.getCurrentPosition() + move);
+            rightBackDriveMotor.setTargetPosition(rightBackDriveMotor.getCurrentPosition() + move);
 
             Encoders.driveRunToPosition();
 
@@ -156,7 +207,13 @@ public class Control extends Devices {
             rightBackDriveMotor.setPower(speed);
 
             while (leftFrontDriveMotor.isBusy() && leftBackDriveMotor.isBusy() && rightFrontDriveMotor.isBusy() && rightBackDriveMotor.isBusy()) {
-
+                telemetry.addData("move diff: ", move);
+                telemetry.addData("left front target enc: ", leftFrontDriveMotor.getCurrentPosition() + move);
+                telemetry.addData("D00 Left Front Drive Motor Enc: ", Encoders.getMotorEnc(Devices.leftFrontDriveMotor));
+                telemetry.addData("D01 Right Front Drive Motor Enc: ", Encoders.getMotorEnc(Devices.rightFrontDriveMotor));
+                telemetry.addData("D02 Left Back Drive Motor Enc: ", Encoders.getMotorEnc(Devices.leftBackDriveMotor));
+                telemetry.addData("D03 Right Back Drive Motor Enc: ", Encoders.getMotorEnc(Devices.rightBackDriveMotor));
+                telemetry.update();
             }
 
             drive.stopPower();
