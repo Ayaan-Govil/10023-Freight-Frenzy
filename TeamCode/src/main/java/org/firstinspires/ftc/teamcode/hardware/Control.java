@@ -57,18 +57,18 @@ public class Control extends Devices {
     public static class drive {
 
         public static void configureDriveMotors() {
-            rightFrontDriveMotor.setDirection(DcMotor.Direction.REVERSE);
-            rightBackDriveMotor.setDirection(DcMotor.Direction.REVERSE);
+            rightFrontDriveMotor.setDirection(DcMotorEx.Direction.REVERSE);
+            rightBackDriveMotor.setDirection(DcMotorEx.Direction.REVERSE);
 
-            leftFrontDriveMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            leftBackDriveMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            rightFrontDriveMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            rightBackDriveMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            leftFrontDriveMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+            leftBackDriveMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+            rightFrontDriveMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+            rightBackDriveMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-            leftFrontDriveMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            leftBackDriveMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            rightFrontDriveMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            rightBackDriveMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftFrontDriveMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            leftBackDriveMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            rightFrontDriveMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            rightBackDriveMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         }
 
         // drive with each side correlating to gamepad sticks

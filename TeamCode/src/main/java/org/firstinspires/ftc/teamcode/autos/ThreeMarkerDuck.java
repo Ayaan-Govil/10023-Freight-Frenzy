@@ -23,7 +23,8 @@ import java.util.List;
 
 // basic autonomous that moves forward 10 inches, waits 5 seconds, turns around, then drives back
 
-public class ThreeMarkerDuck extends LinearOpMode {
+public class
+ThreeMarkerDuck extends LinearOpMode {
 
 //    @Override
 //    public void init() {
