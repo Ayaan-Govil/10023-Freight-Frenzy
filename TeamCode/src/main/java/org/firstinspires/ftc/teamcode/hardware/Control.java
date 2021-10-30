@@ -36,9 +36,8 @@ public class Control extends Devices {
             motor.setPower(speed);
         }
 
-        public static void linearSlideSetPosition(DcMotor motor, int stageIndex) {
+        public static void linearSlideSetPosition(DcMotor motor, int targetPosition) {
             double power = 1.0;
-            int targetPosition = stageIndex * 500;
             if (Encoders.getMotorEnc(motor) > targetPosition) power = -1.0;
 
             motor.setTargetPosition(targetPosition);
@@ -115,8 +114,9 @@ public class Control extends Devices {
     public static class auto {
 
         public static void spinCarousel(DcMotor motor) {
-            int shiftValue = 1000;
+            int shiftValue = 1000; // increase/decrease depending on how long you want the motor to spin
             int targetPosition = Encoders.getMotorEnc(motor) + shiftValue;
+
             motor.setTargetPosition(targetPosition);
             motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

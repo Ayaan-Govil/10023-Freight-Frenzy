@@ -23,35 +23,16 @@ import org.firstinspires.ftc.teamcode.hardware.*;
 
 import java.util.List;
 
-@Autonomous
-
+//@Autonomous
 // basic autonomous that moves forward 10 inches, waits 5 seconds, turns around, then drives back
 
-public class
-ThreeMarkerDuck extends LinearOpMode {
-
-//    @Override
-//    public void init() {
-//        super.init();
-//    }
-//
-//    @Override
-//    public void start() {
-//        super.start();
-//        Control.sensor.initGyro();
-//        Control.auto.moveWithEncoder(10, 0.5);
-//        Control.auto.turnWithGyro(90, 0.5);
-//    }
-//
-//    @Override
-//    public void loop() {
-//        super.loop();
-//    }
+public class ThreeMarkerDuck extends LinearOpMode {
+    public int coeff = 1;
 
     public void runOpMode() {
 //        Devices.initDevices(hardwareMap);
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        drive.setPoseEstimate(new Pose2d(-35, -61, Math.toRadians(90)));
+        drive.setPoseEstimate(new Pose2d(coeff * -35, coeff * -61, Math.toRadians(90)));
         Control.auto.initTF("FreightFrenzy_DM.tflite", new String[]{
                 "Duck",
                 "Marker"
@@ -74,7 +55,7 @@ ThreeMarkerDuck extends LinearOpMode {
         telemetry.update();
 
         Trajectory traj1 = drive.trajectoryBuilder(new Pose2d())
-                .splineTo(new Vector2d(-11, -47), Math.toRadians(90))
+                .splineTo(new Vector2d(coeff * -11, coeff * -47), Math.toRadians(90))
                 .build();
         drive.followTrajectory(traj1);
 
@@ -95,21 +76,21 @@ ThreeMarkerDuck extends LinearOpMode {
         // Control.motor.dumpCargo();
 
         Trajectory traj2 = drive.trajectoryBuilder(new Pose2d())
-                .strafeLeft(24)
+                .strafeLeft(coeff * 24)
                 .build();
         drive.followTrajectory(traj2);
 
         // pick up duck
 
         Trajectory traj3 = drive.trajectoryBuilder(new Pose2d())
-                .strafeRight(24)
+                .strafeRight(coeff * 24)
                 .build();
         drive.followTrajectory(traj3);
 
         // Control.motor.dumpCargo();
 
         Trajectory traj4 = drive.trajectoryBuilder(new Pose2d())
-                .strafeLeft(49)
+                .strafeLeft(coeff * 49)
                 .build();
         drive.followTrajectory(traj4);
 

@@ -62,10 +62,10 @@ public class SampleTeleOp extends BaseRobot {
 //
 //        if (gamepad1.dpad_up && stage < 2) {
 //            stage++;
-//            Control.motor.linearSlideSetPosition(Devices.armLiftMotor, stage);
+//            Control.motor.linearSlideSetPosition(Devices.armLiftMotor, stage * 500);
 //        } else if (gamepad1.dpad_down && stage > 0) {
 //            stage--;
-//            Control.motor.linearSlideSetPosition(Devices.armLiftMotor, stage);
+//            Control.motor.linearSlideSetPosition(Devices.armLiftMotor, stage * 500);
 //        } else if (gamepad1.b) {
 //            Control.motor.moveMotor(Devices.armLiftMotor, 0.1);
 //            if (Encoders.getMotorEnc(Devices.armLiftMotor) >= 500) {
