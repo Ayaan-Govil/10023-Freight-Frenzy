@@ -4,6 +4,7 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Const;
@@ -20,6 +21,13 @@ import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 
 public class SampleTeleOp extends BaseRobot {
     private int stage = 0;
+    private int firstLevel = 0;
+    private int secondLevel = 200;
+    private int thirdLevel = 800;
+
+    private double servoPos = 0.0;
+    private ElapsedTime timer = new ElapsedTime();
+
 //    private double power = 1.0;
 
 
@@ -37,59 +45,63 @@ public class SampleTeleOp extends BaseRobot {
     public void loop() {
         super.loop();
 
+//        telemetry.addData("trackpad x: ", gamepad1.touchpad_finger_1_x);
+//        telemetry.addData("trackpad y: ", gamepad1.touchpad_finger_1_y);
+
 //        Devices.lightStrip.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP2_SHOT);
 //        telemetry.addData("Distance (mm): ", Devices.distanceSensor.getDistance(DistanceUnit.MM));
 
         // drive using tankanum
-        telemetry.addData("right stick y: ", gamepad1.right_stick_y);
-        Control.drive.tankanumDrive(gamepad1.right_stick_y/2, gamepad1.left_stick_y/2, gamepad1.right_stick_x/2);
+//        telemetry.addData("right stick y: ", gamepad1.right_stick_y);
+        Control.drive.tankanumDrive(gamepad1.right_stick_y / 2, gamepad1.left_stick_y / 2, gamepad1.right_stick_x / 2);
 
-//        if (Encoders.getMotorEnc(Devices.armLiftMotor) < 400) stage = 0;
-//        else if (Encoders.getMotorEnc(Devices.armLiftMotor) < 900) stage = 1;
-//        else stage = 2;
-//
-//        // control dumpy 🤤🥴😩
-//        if (gamepad1.dpad_right) {
-//            Devices.dumpyServo.setPosition(1.0);
-//        } else if (gamepad1.dpad_left) {
-//            Devices.dumpyServo.setPosition(0.0);
-//        }
-//
-//        telemetry.addData("lift enc: ", Encoders.getMotorEnc(Devices.armLiftMotor));
-//        telemetry.addData("stage: ", stage);
-//
-//        Devices.armLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//
-//        if (gamepad1.dpad_up && stage < 2) {
-//            stage++;
-//            Control.motor.linearSlideSetPosition(Devices.armLiftMotor, stage * 500);
-//        } else if (gamepad1.dpad_down && stage > 0) {
-//            stage--;
-//            Control.motor.linearSlideSetPosition(Devices.armLiftMotor, stage * 500);
-//        } else if (gamepad1.b) {
-//            Control.motor.moveMotor(Devices.armLiftMotor, 0.1);
-//            if (Encoders.getMotorEnc(Devices.armLiftMotor) >= 500) {
-//                stage = 1;
-//            }
-//            if (Encoders.getMotorEnc(Devices.armLiftMotor) >= 1000) {
-//                stage = 2;
-//            }
-//        } else if (gamepad1.a) {
-//            Control.motor.moveMotor(Devices.armLiftMotor, -0.1);
-//            if (Encoders.getMotorEnc(Devices.armLiftMotor) <= 500) {
-//                stage = 1;
-//            }
-//            if (Encoders.getMotorEnc(Devices.armLiftMotor) <= 0) {
-//                stage = 0;
-//            }
-//        } else Control.motor.moveMotor(Devices.armLiftMotor, 0.0);
+        if (Encoders.getMotorEnc(Devices.armLiftMotor) < secondLevel - 100) stage = 0;
+        else if (Encoders.getMotorEnc(Devices.armLiftMotor) < thirdLevel - 100) stage = 1;
+        else stage = 2;
 
-        // control armClampServo
-//        if (gamepad1.left_trigger > 0.0 || gamepad1.left_bumper) {
-//            Control.setServoPosition(Devices.armClampServo, 0.0);
-//        } else if (gamepad1.right_trigger > 0.0 || gamepad1.right_bumper) {
-//            Control.setServoPosition(Devices.armClampServo, 1.0);
-//        }
+//        control dumpy 🤤🥴😩
+        if (gamepad1.a && timer.seconds() > 2) {
+            timer.reset();
+            Devices.dumpyServo.setPosition(servoPos);
+            servoPos = Math.abs(servoPos - 1.0);
+        }
+
+        // intake and conveyor
+        Control.motor.moveMotor(Devices.intakeMotor, gamepad1.right_trigger);
+        Control.motor.moveMotor(Devices.conveyorMotor, gamepad1.left_trigger);
+
+        if (gamepad1.x) {
+            Devices.carouselServo.setPower(1.0);
+        } else Devices.carouselServo.setPower(0);
+
+        telemetry.addData("lift enc: ", Encoders.getMotorEnc(Devices.armLiftMotor));
+        telemetry.addData("stage: ", stage);
+
+        if (gamepad1.dpad_up && stage < 2) {
+            Control.motor.linearSlideSetPosition(Devices.armLiftMotor, stage == 0 ? secondLevel : thirdLevel);
+            stage++;
+        } else if (gamepad1.dpad_down && stage > 0) {
+            Control.motor.linearSlideSetPosition(Devices.armLiftMotor, stage == 2 ? secondLevel : firstLevel);
+            stage--;
+        } else if (gamepad1.dpad_right) {
+            Control.motor.moveMotor(Devices.armLiftMotor, 0.1);
+            if (Encoders.getMotorEnc(Devices.armLiftMotor) >= secondLevel) {
+                stage = 1;
+            }
+            if (Encoders.getMotorEnc(Devices.armLiftMotor) >= thirdLevel) {
+                stage = 2;
+            }
+        } else if (gamepad1.dpad_left) {
+            Control.motor.moveMotor(Devices.armLiftMotor, -0.1);
+            if (Encoders.getMotorEnc(Devices.armLiftMotor) <= secondLevel) {
+                stage = 1;
+            }
+            if (Encoders.getMotorEnc(Devices.armLiftMotor) <= firstLevel) {
+                stage = 0;
+            }
+        } else Control.motor.moveMotor(Devices.armLiftMotor, 0.0);
+
+        Devices.armLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     @Override

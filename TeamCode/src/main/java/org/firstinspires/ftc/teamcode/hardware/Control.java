@@ -40,9 +40,9 @@ public class Control extends Devices {
             double power = 1.0;
             if (Encoders.getMotorEnc(motor) > targetPosition) power = -1.0;
 
-            motor.setTargetPosition(targetPosition);
             motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            motor.setTargetPosition(targetPosition);
+            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
             motor.setPower(power);
             while (motor.isBusy()) {

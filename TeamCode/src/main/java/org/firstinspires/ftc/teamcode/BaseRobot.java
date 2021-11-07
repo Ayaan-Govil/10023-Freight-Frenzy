@@ -29,22 +29,22 @@ public class BaseRobot extends OpMode {
     @Override
     public void start() {
 //        Encoders.resetMotorEnc(Devices.armLiftMotor);
-        Encoders.driveResetEncs();
+//        Encoders.driveResetEncs();
     }
 
     // this function runs when you hit the stop button
     @Override
     public void stop() {
-        Encoders.driveResetEncs();
+//        Encoders.driveResetEncs();
     }
 
     // this function loops while the bot is running
     @Override
     public void loop() {
         // telemetry (inherited from OpMode class) serves as logging on the phone - we're constantly tracking the drive motor encoders by doing this
-        telemetry.addData("D00 Left Front Drive Motor Enc: ", Encoders.getMotorEnc(Devices.leftFrontDriveMotor));
-        telemetry.addData("D01 Right Front Drive Motor Enc: ", Encoders.getMotorEnc(Devices.rightFrontDriveMotor));
-        telemetry.addData("D02 Left Back Drive Motor Enc: ", Encoders.getMotorEnc(Devices.leftBackDriveMotor));
-        telemetry.addData("D03 Right Back Drive Motor Enc: ", Encoders.getMotorEnc(Devices.rightBackDriveMotor));
+//        telemetry.addData("D00 Left Front Drive Motor Enc: ", Encoders.getMotorEnc(Devices.leftFrontDriveMotor));
+//        telemetry.addData("D01 Right Front Drive Motor Enc: ", Encoders.getMotorEnc(Devices.rightFrontDriveMotor));
+//        telemetry.addData("D02 Left Back Drive Motor Enc: ", Encoders.getMotorEnc(Devices.leftBackDriveMotor));
+//        telemetry.addData("D03 Right Back Drive Motor Enc: ", Encoders.getMotorEnc(Devices.rightBackDriveMotor));
     }
 }

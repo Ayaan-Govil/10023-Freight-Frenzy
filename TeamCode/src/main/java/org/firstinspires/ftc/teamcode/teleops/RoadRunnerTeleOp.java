@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.teleops;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -15,6 +17,11 @@ import org.firstinspires.ftc.teamcode.hardware.Devices;
 
 public class RoadRunnerTeleOp extends LinearOpMode {
     private SampleMecanumDrive drive;
+
+    private float finger1XDiff = -100f;
+    private float finger1YDiff = -100f;
+
+    private float finger2XDiff = -100f;
 
     public void runOpMode() {
         drive = new SampleMecanumDrive(hardwareMap);
@@ -40,6 +47,8 @@ public class RoadRunnerTeleOp extends LinearOpMode {
                     )
             );
 
+//            drive.trajectoryBuilder()
+
             // Make sure to call drive.update() on *every* loop
             // Increasing loop time by utilizing bulk reads and minimizing writes will increase your odometry accuracy
             drive.update();
@@ -54,6 +63,38 @@ public class RoadRunnerTeleOp extends LinearOpMode {
 
             // Insert whatever teleop code you're using
 //            this.tankanumDrive(gamepad1.right_stick_y * 0.6, gamepad1.left_stick_y * 0.6, gamepad1.right_stick_x * 0.6);
+
+            if (gamepad1.touchpad_finger_1) {
+                if (finger1XDiff == -100f) finger1XDiff = gamepad1.touchpad_finger_1_x;
+                if (finger1YDiff == -100f) finger1YDiff = gamepad1.touchpad_finger_1_y;
+
+                float diffX = gamepad1.touchpad_finger_1_x - finger1XDiff;
+                float diffY = gamepad1.touchpad_finger_1_y - finger1YDiff;
+
+                drive.followTrajectoryAsync(
+                        drive.trajectoryBuilder(myPose)
+                                .lineTo(new Vector2d(myPose.getX() + (diffX * 10), myPose.getY() + (diffY * 10)))
+                                .build()
+                );
+
+                finger1XDiff = gamepad1.touchpad_finger_1_x;
+                finger1YDiff = gamepad1.touchpad_finger_1_y;
+            } else {
+                finger1XDiff = -100f;
+                finger1YDiff = -100f;
+            }
+
+//            if (gamepad1.touchpad_finger_2) {
+//                if (finger2XDiff == -100f) finger2XDiff = gamepad1.touchpad_finger_2_x;
+//
+//                float diffX = gamepad1.touchpad_finger_2_x - finger2XDiff;
+//
+//                drive.turnAsync(Math.toRadians(diffX));
+//
+//                finger2XDiff = gamepad1.touchpad_finger_2_x;
+//            } else {
+//                finger2XDiff = -100f;
+//            }
         }
     }
 

@@ -35,7 +35,7 @@ public class TensorflowSample extends LinearOpMode {
                 "Duck",
                 "Marker"
         }, 1.0, hardwareMap);
-        Control.sensor.initGyro();
+//        Control.sensor.initGyro();
 
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
@@ -43,26 +43,22 @@ public class TensorflowSample extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-//            if (tfod != null) {
-//                // getUpdatedRecognitions() will return null if no new information is available since
-//                // the last time that call was made.
-//                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-//                if (updatedRecognitions != null) {
-//                    telemetry.addData("# Object Detected", updatedRecognitions.size());
-//                    // step through the list of recognitions and display boundary info.
-//                    int i = 0;
-//                    for (Recognition recognition : updatedRecognitions) {
-//                        telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-//                        telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
-//                                recognition.getLeft(), recognition.getTop());
-//                        telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
-//                                recognition.getRight(), recognition.getBottom());
-//                        telemetry.addData("angle: ", recognition.estimateAngleToObject(AngleUnit.DEGREES));
-//                        i++;
-//                    }
-//                    telemetry.update();
-//                }
-//            }
+            List<Recognition> updatedRecognitions = Control.auto.tfGetRecognitions();
+            if (updatedRecognitions != null) {
+                telemetry.addData("# Object Detected", updatedRecognitions.size());
+                // step through the list of recognitions and display boundary info.
+                int i = 0;
+                for (Recognition recognition : updatedRecognitions) {
+                    telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                    telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                            recognition.getLeft(), recognition.getTop());
+                    telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                            recognition.getRight(), recognition.getBottom());
+                    telemetry.addData("angle: ", recognition.estimateAngleToObject(AngleUnit.DEGREES));
+                    i++;
+                }
+                telemetry.update();
+            }
         }
     }
 }

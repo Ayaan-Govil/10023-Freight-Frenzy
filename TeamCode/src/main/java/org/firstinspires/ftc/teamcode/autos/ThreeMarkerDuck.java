@@ -32,7 +32,9 @@ public class ThreeMarkerDuck extends LinearOpMode {
     public void runOpMode() {
 //        Devices.initDevices(hardwareMap);
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        drive.setPoseEstimate(new Pose2d(coeff * -35, coeff * -61, Math.toRadians(90)));
+        Pose2d startPos = new Pose2d(coeff * -35, coeff * -61, Math.toRadians(90));
+        drive.setPoseEstimate(startPos);
+
         Control.auto.initTF("FreightFrenzy_DM.tflite", new String[]{
                 "Duck",
                 "Marker"
@@ -54,7 +56,7 @@ public class ThreeMarkerDuck extends LinearOpMode {
         telemetry.addData("duck position index: ", duckPositionIndex);
         telemetry.update();
 
-        Trajectory traj1 = drive.trajectoryBuilder(new Pose2d())
+        Trajectory traj1 = drive.trajectoryBuilder(startPos)
                 .splineTo(new Vector2d(coeff * -11, coeff * -47), Math.toRadians(90))
                 .build();
         drive.followTrajectory(traj1);
@@ -72,39 +74,36 @@ public class ThreeMarkerDuck extends LinearOpMode {
 //        Control.auto.moveWithEncoder(20, 1.0);
 
         // move cargo to level indicated by duck
-        Control.motor.linearSlideSetPosition(Devices.armLiftMotor, duckPositionIndex);
+        int targetPosition = duckPositionIndex == 1 || duckPositionIndex == 2 ? duckPositionIndex == 1 ? 200 : 1000 : 0;
+        Control.motor.linearSlideSetPosition(Devices.armLiftMotor, targetPosition);
         // Control.motor.dumpCargo();
 
-        Trajectory traj2 = drive.trajectoryBuilder(new Pose2d())
+        Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
                 .strafeLeft(coeff * 24)
                 .build();
         drive.followTrajectory(traj2);
 
         // pick up duck
 
-        Trajectory traj3 = drive.trajectoryBuilder(new Pose2d())
+        Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
                 .strafeRight(coeff * 24)
                 .build();
         drive.followTrajectory(traj3);
 
         // Control.motor.dumpCargo();
 
-        Trajectory traj4 = drive.trajectoryBuilder(new Pose2d())
-                .strafeLeft(coeff * 49)
+        Trajectory traj4 = drive.trajectoryBuilder(traj3.end())
+                .lineTo(new Vector2d(-60 * coeff, -60))
                 .build();
         drive.followTrajectory(traj4);
 
-        Trajectory traj5 = drive.trajectoryBuilder(new Pose2d())
-                .back(13)
-                .build();
-        drive.followTrajectory(traj5);
+        // get duck off of carousel
+//        Control.auto.spinCarousel(Devices.carouselMotor);
 
-        // spin carousel
-
-        Trajectory traj6 = drive.trajectoryBuilder(new Pose2d())
+        Trajectory traj5 = drive.trajectoryBuilder(traj4.end())
                 .forward(25)
                 .build();
-        drive.followTrajectory(traj6);
+        drive.followTrajectory(traj5);
 
         return;
     }
