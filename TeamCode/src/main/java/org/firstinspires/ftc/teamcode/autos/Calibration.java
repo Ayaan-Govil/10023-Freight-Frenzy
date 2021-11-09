@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.hardware.*;
 
 import java.util.List;
 
-@Autonomous
+//@Autonomous
 
 // basic autonomous that moves forward 10 inches, waits 5 seconds, turns around, then drives back
 
