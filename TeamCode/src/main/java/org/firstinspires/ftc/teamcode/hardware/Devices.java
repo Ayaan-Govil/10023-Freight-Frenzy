@@ -18,19 +18,19 @@ public class Devices {
 
     // NOTE: deviceName should be the same as the name specified on the configuration
     public static void initDevices(HardwareMap hardwareMap) {
-//        leftBackDriveMotor = hardwareMap.get(DcMotorEx.class, "leftBackDriveMotor");
-//        rightBackDriveMotor = hardwareMap.get(DcMotorEx.class, "rightBackDriveMotor");
-//        leftFrontDriveMotor = hardwareMap.get(DcMotorEx.class, "leftFrontDriveMotor");
-//        rightFrontDriveMotor = hardwareMap.get(DcMotorEx.class, "rightFrontDriveMotor");
+//        leftBackDriveMotor = hardwareMap.get(DcMotorEx.class, "leftRear");
+//        rightBackDriveMotor = hardwareMap.get(DcMotorEx.class, "rightRear");
+//        leftFrontDriveMotor = hardwareMap.get(DcMotorEx.class, "leftFront");
+//        rightFrontDriveMotor = hardwareMap.get(DcMotorEx.class, "rightFront");
 //        Control.drive.configureDriveMotors();
 
         intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         conveyorMotor = hardwareMap.get(DcMotor.class, "conveyorMotor");
         conveyorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        armLiftMotor = hardwareMap.get(DcMotor.class, "armLiftMotor");
-        dumpyServo = hardwareMap.get(Servo.class, "dumpyServo");
-        carouselServo = hardwareMap.get(CRServo.class, "carouselServo");
+//        armLiftMotor = hardwareMap.get(DcMotor.class, "armLiftMotor");
+//        dumpyServo = hardwareMap.get(Servo.class, "dumpyServo");
+//        carouselServo = hardwareMap.get(CRServo.class, "carouselServo");
 //        lightStrip = hardwareMap.get(RevBlinkinLedDriver.class, "lightStrip");
 //        distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
 
