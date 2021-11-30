@@ -4,8 +4,8 @@ package org.firstinspires.ftc.teamcode.hardware;
 public class ConstantVariables {
 
     public static final double WHEEL_DIAMETER = 3.77953; // diameter of wheels (this one is gobuilda mecanum)
-    public static final int GEAR_RATIO = 20; // gear ratio of motors (this one is 20:1)
-    public static final int COUNTS_PER_ROTATION = 18; // increase/decrease during calibration
+    public static final int GEAR_RATIO = 14; // gear ratio of motors (this one is 20:1)
+    public static final int COUNTS_PER_ROTATION = 27; // increase/decrease during calibration
     public static final double COUNTS_PER_INCH = (COUNTS_PER_ROTATION * GEAR_RATIO) / (Math.PI * WHEEL_DIAMETER); //counts per inch, cpr * gear ratio / (2 * pi * diameter (in inches, in the center))
     public static final double BIAS = 1.0;
 

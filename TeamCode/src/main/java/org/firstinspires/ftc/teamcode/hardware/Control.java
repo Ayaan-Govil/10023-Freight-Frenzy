@@ -59,10 +59,6 @@ public class Control extends Devices {
             rightFrontDriveMotor.setDirection(DcMotorEx.Direction.REVERSE);
             rightBackDriveMotor.setDirection(DcMotorEx.Direction.REVERSE);
 
-            // for loukas:
-            // rightBackDriveMotor.setDirection(DcMotorEx.Direction.REVERSE);
-            // leftFrontDriveMotor.setDirection(DcMotorEx.Direction.REVERSE);
-
 
             leftFrontDriveMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
             leftBackDriveMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
@@ -90,8 +86,8 @@ public class Control extends Devices {
         public static void tankanumDrive(double rightPwr, double leftPwr, double lateralPwr) {
             double leftFrontPower = Range.clip(leftPwr - lateralPwr, -1.0, 1.0);
             double leftBackPower = Range.clip(leftPwr + lateralPwr, -1.0, 1.0);
-            double rightFrontPower = Range.clip(rightPwr - lateralPwr, -1.0, 1.0);
-            double rightBackPower = Range.clip(rightPwr + lateralPwr, -1.0, 1.0);
+            double rightFrontPower = Range.clip(rightPwr + lateralPwr, -1.0, 1.0);
+            double rightBackPower = Range.clip(rightPwr - lateralPwr, -1.0, 1.0);
 
             leftFrontDriveMotor.setPower(leftFrontPower);
             leftBackDriveMotor.setPower(leftBackPower);
@@ -199,7 +195,7 @@ public class Control extends Devices {
 //            } else return false;
 //        }
 
-        public static void moveWithEncoder(double inches, double speed, Telemetry telemetry) {
+        public static void moveWithEncoder(double inches, double speed) {
             double conversion = ConstantVariables.COUNTS_PER_INCH * ConstantVariables.BIAS;
             int move = (int) (Math.round(inches * conversion));
 
@@ -216,13 +212,7 @@ public class Control extends Devices {
             rightBackDriveMotor.setPower(speed);
 
             while (leftFrontDriveMotor.isBusy() && leftBackDriveMotor.isBusy() && rightFrontDriveMotor.isBusy() && rightBackDriveMotor.isBusy()) {
-                telemetry.addData("move diff: ", move);
-                telemetry.addData("left front target enc: ", leftFrontDriveMotor.getCurrentPosition() + move);
-                telemetry.addData("D00 Left Front Drive Motor Enc: ", Encoders.getMotorEnc(Devices.leftFrontDriveMotor));
-                telemetry.addData("D01 Right Front Drive Motor Enc: ", Encoders.getMotorEnc(Devices.rightFrontDriveMotor));
-                telemetry.addData("D02 Left Back Drive Motor Enc: ", Encoders.getMotorEnc(Devices.leftBackDriveMotor));
-                telemetry.addData("D03 Right Back Drive Motor Enc: ", Encoders.getMotorEnc(Devices.rightBackDriveMotor));
-                telemetry.update();
+
             }
 
             drive.stopPower();

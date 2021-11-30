@@ -18,23 +18,24 @@ public class Devices {
 
     // NOTE: deviceName should be the same as the name specified on the configuration
     public static void initDevices(HardwareMap hardwareMap) {
-//        leftBackDriveMotor = hardwareMap.get(DcMotorEx.class, "leftRear");
-//        rightBackDriveMotor = hardwareMap.get(DcMotorEx.class, "rightRear");
-//        leftFrontDriveMotor = hardwareMap.get(DcMotorEx.class, "leftFront");
-//        rightFrontDriveMotor = hardwareMap.get(DcMotorEx.class, "rightFront");
-//        Control.drive.configureDriveMotors();
+        leftBackDriveMotor = hardwareMap.get(DcMotorEx.class, "leftBack");
+        rightBackDriveMotor = hardwareMap.get(DcMotorEx.class, "rightBack");
+        leftFrontDriveMotor = hardwareMap.get(DcMotorEx.class, "leftFront");
+        rightFrontDriveMotor = hardwareMap.get(DcMotorEx.class, "rightFront");
+        Control.drive.configureDriveMotors();
 
-        intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
+        intakeMotor = hardwareMap.get(DcMotor.class, "intake");
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        conveyorMotor = hardwareMap.get(DcMotor.class, "conveyorMotor");
+        conveyorMotor = hardwareMap.get(DcMotor.class, "conveyor");
         conveyorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        armLiftMotor = hardwareMap.get(DcMotor.class, "armLiftMotor");
-//        dumpyServo = hardwareMap.get(Servo.class, "dumpyServo");
-//        carouselServo = hardwareMap.get(CRServo.class, "carouselServo");
+        armLiftMotor = hardwareMap.get(DcMotor.class, "lift");
+        armLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        dumpyServo = hardwareMap.get(Servo.class, "dumpy");
+        carouselServo = hardwareMap.get(CRServo.class, "carousel");
 //        lightStrip = hardwareMap.get(RevBlinkinLedDriver.class, "lightStrip");
 //        distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
-//        webcam = hardwareMap.get(WebcamName.class, "Webcam 1");
+        webcam = hardwareMap.get(WebcamName.class, "Webcam 1");
     }
 }
